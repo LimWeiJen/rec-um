@@ -3,6 +3,7 @@ import { CheckCircle, Users, Rocket } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Separator } from "@/components/ui/separator";
 
 const benefits = [
   {
@@ -96,6 +97,8 @@ export default function AboutPage() {
               Our mission is to create a dynamic and inclusive environment where students can explore their passion for robotics, develop technical and leadership skills, and collaborate on innovative projects that solve real-world problems. We aim to be a center of excellence that inspires the next generation of engineers and leaders.
             </p>
           </div>
+
+          <Separator className="my-8" />
 
           <div className="space-y-4 text-center">
             <h2 className="text-3xl font-bold">Our Vision</h2>
