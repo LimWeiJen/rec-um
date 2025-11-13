@@ -15,7 +15,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[60vh] md:h-[70vh]">
+      <section className="relative w-full h-screen">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -27,7 +27,7 @@ export default function Home() {
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative container mx-auto flex h-full max-w-screen-2xl flex-col items-center justify-center text-center text-white px-4">
+        <div className="relative flex h-full flex-col items-center justify-center text-center text-white px-4">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline">
             Welcome to REC Robotics Hub
           </h1>
