@@ -97,6 +97,13 @@ export default function AboutPage() {
             </p>
           </div>
 
+          <div className="space-y-4 text-center">
+            <h2 className="text-3xl font-bold">Our Vision</h2>
+            <p className="max-w-3xl mx-auto text-muted-foreground">
+              To be a leading university robotics club, recognized for our innovation, competitive spirit, and contribution to the field of robotics. We envision a future where our members are at the forefront of technological advancement, shaping the world with their creativity and expertise.
+            </p>
+          </div>
+
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-center">Why Join Us?</h2>
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
