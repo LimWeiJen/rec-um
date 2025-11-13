@@ -65,9 +65,9 @@ export default function ActivitiesPage() {
             <div className="grid gap-6">
               {upcomingActivities.map((activity, index) => (
                 <Card key={index} className="overflow-hidden">
-                  <div className="grid md:grid-cols-2">
+                  <div>
                     {upcomingActivityImage && (
-                      <div className="relative h-60 md:h-full">
+                      <div className="relative h-80 w-full">
                         <Image
                           src={upcomingActivityImage.imageUrl}
                           alt={activity.title}
