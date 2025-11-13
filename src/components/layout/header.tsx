@@ -20,7 +20,7 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [mouseAtTop, setMouseAtTop] = useState(false);
+  const [mouseAtTop, setMouseAtTop] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,9 +28,7 @@ export function Header() {
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (pathname === '/') {
-        setMouseAtTop(event.clientY < 80);
-      }
+      setMouseAtTop(event.clientY < 80);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -38,18 +36,14 @@ export function Header() {
     
     // Initial check
     handleScroll();
-    if (pathname === '/') {
-      setMouseAtTop(false);
-    } else {
-      setMouseAtTop(true);
-    }
+    setMouseAtTop(true);
 
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [pathname]);
+  }, []);
 
   const NavLink = ({ href, label }: { href: string; label: string }) => {
     const isActive = pathname === href;
