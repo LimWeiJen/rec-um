@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Users, Trophy, Target, Info } from "lucide-react";
+import { ArrowRight, Users, Trophy, Target, Info, Instagram, Facebook } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,6 +84,29 @@ export default function Home() {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-20 bg-muted/40">
+        <div className="container mx-auto max-w-screen-2xl px-4 text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline">Get In Touch</h2>
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+                Follow our journey, get the latest updates, and connect with us on social media.
+            </p>
+            <div className="mt-8 flex justify-center gap-4">
+                <Button asChild size="lg" variant="outline">
+                    <Link href="#" target="_blank">
+                        <Instagram className="mr-2 h-5 w-5" />
+                        Instagram
+                    </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                    <Link href="#" target="_blank">
+                        <Facebook className="mr-2 h-5 w-5" />
+                        Facebook
+                    </Link>
+                </Button>
+            </div>
         </div>
       </section>
     </div>
