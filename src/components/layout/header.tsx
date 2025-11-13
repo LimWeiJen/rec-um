@@ -27,6 +27,8 @@ export function Header() {
     };
 
     window.addEventListener("scroll", handleScroll);
+    // Initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -64,10 +66,15 @@ export function Header() {
 
   return (
     <header className={cn(
-      "sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300",
-      isHomePage && !scrolled ? "-translate-y-full" : "translate-y-0"
+      "fixed top-0 z-50 w-full border-b transition-colors duration-300",
+      isHomePage && !scrolled 
+        ? "border-transparent" 
+        : "border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     )}>
-      <div className="container flex h-14 max-w-screen-2xl items-center">
+      <div className={cn(
+        "container flex h-14 max-w-screen-2xl items-center transition-transform duration-300",
+        isHomePage && !scrolled ? "-translate-y-full" : "translate-y-0"
+      )}>
         <div className="mr-4 flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Bot className="h-6 w-6 text-primary" />
