@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Cpu, Wrench, Code, Trophy } from "lucide-react";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 
 const departments = [
@@ -18,14 +18,13 @@ const departments = [
 ];
 
 const roboconAchievements = [
-  { title: "National Champions", year: "2022" },
-  { title: "Best Innovative Design", year: "2021" },
-  { title: "Quarter-finalists", year: "2023" },
+  { title: "National Champions", year: "2022", imageUrlId: "achievement-1" },
+  { title: "Best Innovative Design", year: "2021", imageUrlId: "achievement-2" },
+  { title: "Quarter-finalists", year: "2023", imageUrlId: "achievement-3" },
 ];
 
 export default function RoboconPage() {
   const prepImage = PlaceHolderImages.find(p => p.id === 'robocon-prep');
-  const achievementImage = PlaceHolderImages.find(p => p.id === 'robocon-achievement');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-robocon');
 
   return (
@@ -124,21 +123,30 @@ export default function RoboconPage() {
           <AccordionItem value="item-4">
             <AccordionTrigger className="text-xl font-semibold hover:no-underline">Our Robocon Achievements</AccordionTrigger>
             <AccordionContent className="pt-2">
-               <div className="grid md:grid-cols-2 gap-8 items-center">
-                {achievementImage && (
-                    <div className="relative h-64 rounded-lg overflow-hidden order-last md:order-first">
-                      <Image src={achievementImage.imageUrl} alt={achievementImage.description} fill className="object-cover" data-ai-hint={achievementImage.imageHint} />
-                    </div>
-                )}
-                <div className="space-y-3">
-                  {roboconAchievements.map(ach => (
-                    <div key={ach.title} className="flex items-center gap-4 p-3 bg-card/50 rounded-lg">
-                      <Trophy className="h-6 w-6 text-primary flex-shrink-0" />
-                      <p className="font-medium flex-grow">{ach.title}</p>
-                      <Badge>{ach.year}</Badge>
-                    </div>
-                  ))}
-                </div>
+               <div className="grid md:grid-cols-3 gap-6">
+                {roboconAchievements.map(ach => {
+                  const achImage = PlaceHolderImages.find(p => p.id === ach.imageUrlId);
+                  return (
+                    <Card key={ach.title} className="overflow-hidden group text-center">
+                       {achImage && (
+                        <div className="relative h-56 w-full">
+                          <Image
+                            src={achImage.imageUrl}
+                            alt={ach.title}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            data-ai-hint={achImage.imageHint}
+                          />
+                        </div>
+                      )}
+                      <CardContent className="p-4">
+                        <Trophy className="h-6 w-6 text-primary mx-auto mb-2" />
+                        <h4 className="font-semibold text-lg">{ach.title}</h4>
+                        <Badge variant="secondary" className="mt-1">{ach.year}</Badge>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
             </AccordionContent>
           </AccordionItem>

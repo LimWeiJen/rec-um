@@ -119,6 +119,24 @@
       "description": "Code on a computer screen in a dark room.",
       "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2RlfGVufDB8fHx8MTc2MzY1MzMzN3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "code"
+    },
+    {
+      "id": "achievement-1",
+      "description": "A gold trophy against a dark background.",
+      "imageUrl": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cm9waHl8ZW58MHx8fHwxNzYzNjU0MjMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "trophy"
+    },
+    {
+      "id": "achievement-2",
+      "description": "A shiny medal for best design.",
+      "imageUrl": "https://images.unsplash.com/photo-1519669556878-63bd5de52344?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZWRhbHxlbnwwfHx8fDE3NjM2NTQyMzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "medal"
+    },
+    {
+      "id": "achievement-3",
+      "description": "A team working together in a competition.",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21wZXRpdGlvbiUyMHRlYW18ZW58MHx8fHwxNzYzNjU0MjM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "competition team"
     }
   ]
 }
