@@ -20,17 +20,30 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [mouseAtTop, setMouseAtTop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
 
+    const handleMouseMove = (event: MouseEvent) => {
+      if (pathname === '/') {
+        setMouseAtTop(event.clientY < 80);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("mousemove", handleMouseMove);
+    
     // Initial check
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [pathname]);
 
   const NavLink = ({ href, label }: { href: string; label: string }) => {
     const isActive = pathname === href;
@@ -63,17 +76,18 @@ export function Header() {
   };
 
   const isHomePage = pathname === "/";
+  const showNav = !isHomePage || scrolled || mouseAtTop;
 
   return (
     <header className={cn(
       "fixed top-0 z-50 w-full border-b transition-colors duration-300",
-      isHomePage && !scrolled 
-        ? "border-transparent" 
-        : "border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      showNav
+        ? "border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        : "border-transparent" 
     )}>
       <div className={cn(
         "container flex h-14 max-w-screen-2xl items-center transition-transform duration-300",
-        isHomePage && !scrolled ? "-translate-y-full" : "translate-y-0"
+        !showNav ? "-translate-y-full" : "translate-y-0"
       )}>
         <div className="mr-4 flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
