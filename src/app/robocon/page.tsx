@@ -8,11 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Cpu, Wrench, Code, Trophy } from "lucide-react";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 const departments = [
-  { name: "Mechanical Team", icon: <Wrench className="h-5 w-5 text-primary" />, description: "Designs and fabricates the robot's structure, ensuring durability and agility." },
-  { name: "Electrical Team", icon: <Cpu className="h-5 w-5 text-primary" />, description: "Manages all wiring, power distribution, and sensor integration." },
-  { name: "Programming Team", icon: <Code className="h-5 w-5 text-primary" />, description: "Develops the robot's control software, from autonomous logic to manual controls." },
+  { name: "Mechanical Team", icon: <Wrench className="h-5 w-5 text-primary" />, description: "Designs and fabricates the robot's structure, ensuring durability and agility.", imageUrlId: "mechanical-team" },
+  { name: "Electrical Team", icon: <Cpu className="h-5 w-5 text-primary" />, description: "Manages all wiring, power distribution, and sensor integration.", imageUrlId: "electrical-team" },
+  { name: "Programming Team", icon: <Code className="h-5 w-5 text-primary" />, description: "Develops the robot's control software, from autonomous logic to manual controls.", imageUrlId: "programming-team" },
 ];
 
 const roboconAchievements = [
@@ -89,16 +91,32 @@ export default function RoboconPage() {
           <AccordionItem value="item-3">
             <AccordionTrigger className="text-xl font-semibold hover:no-underline">Team Departments</AccordionTrigger>
             <AccordionContent className="pt-2">
-              <div className="space-y-4">
-                {departments.map(dept => (
-                  <div key={dept.name} className="flex items-start gap-4 p-4 border rounded-lg bg-card/50">
-                    {dept.icon}
-                    <div>
-                      <h4 className="font-semibold">{dept.name}</h4>
-                      <p className="text-sm text-muted-foreground">{dept.description}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="grid md:grid-cols-3 gap-6">
+                {departments.map(dept => {
+                  const deptImage = PlaceHolderImages.find(p => p.id === dept.imageUrlId);
+                  return (
+                    <Card key={dept.name} className="overflow-hidden group">
+                       {deptImage && (
+                        <div className="relative h-48 w-full">
+                          <Image
+                            src={deptImage.imageUrl}
+                            alt={dept.name}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            data-ai-hint={deptImage.imageHint}
+                          />
+                        </div>
+                      )}
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-3 mb-2">
+                          {dept.icon}
+                          <h4 className="font-semibold text-lg">{dept.name}</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{dept.description}</p>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
             </AccordionContent>
           </AccordionItem>
