@@ -75,7 +75,6 @@ export function Header() {
     );
   };
 
-  const isHomePage = pathname === "/";
   const showNav = scrolled || mouseAtTop;
 
   return (
@@ -83,9 +82,9 @@ export function Header() {
       "fixed top-0 z-50 w-full transition-transform duration-300",
       showNav ? "translate-y-0" : "-translate-y-full"
     )}>
-      <div className="container px-4 md:px-6 mt-2">
+      <div className="container px-4 md:px-6 mt-2 flex justify-center">
         <div className={cn(
-          "relative flex h-14 max-w-screen-2xl items-center rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          "relative flex h-14 w-full max-w-screen-lg items-center rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
         )}>
           <div className="mr-4 flex items-center">
             <Link href="/" className="mr-6 flex items-center space-x-2">
