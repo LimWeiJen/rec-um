@@ -2,19 +2,29 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from "next/image";
+import Link from "next/link";
+import { Instagram, Linkedin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const teamMembers = [
-  { name: "Alex Dynamo", role: "Club Director", imageUrlId: "team-member-1" },
-  { name: "Brenda Circuit", role: "Head of Mechanical", imageUrlId: "team-member-2" },
-  { name: "Charlie Gear", role: "Head of Electrical", imageUrlId: "team-member-3" },
-  { name: "Dana Logic", role: "Head of Programming", imageUrlId: "team-member-4" },
+  { name: "Alex Dynamo", role: "Club Director", imageUrlId: "team-member-1", instagram: "#", whatsapp: "#", linkedin: "#" },
+  { name: "Brenda Circuit", role: "Head of Mechanical", imageUrlId: "team-member-2", instagram: "#", whatsapp: "#", linkedin: "#" },
+  { name: "Charlie Gear", role: "Head of Electrical", imageUrlId: "team-member-3", instagram: "#", whatsapp: "#", linkedin: "#" },
+  { name: "Dana Logic", role: "Head of Programming", imageUrlId: "team-member-4", instagram: "#", whatsapp: "#", linkedin: "#" },
 ];
 
 const pastDirectors = [
-    { name: "Edward Volt", term: "2022-2023", imageUrlId: "past-director-1" },
-    { name: "Fiona Servo", term: "2021-2022", imageUrlId: "past-director-2" },
-    { name: "George Piston", term: "2020-2021", imageUrlId: "past-director-3" },
+    { name: "Edward Volt", term: "2022-2023", imageUrlId: "past-director-1", linkedin: "#" },
+    { name: "Fiona Servo", term: "2021-2022", imageUrlId: "past-director-2", linkedin: "#" },
+    { name: "George Piston", term: "2020-2021", imageUrlId: "past-director-3", linkedin: "#" },
 ];
+
+const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+    </svg>
+)
+
 
 export default function OrganizationPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-organization');
@@ -61,6 +71,17 @@ export default function OrganizationPage() {
                       </Avatar>
                       <h3 className="text-xl font-semibold">{member.name}</h3>
                       <p className="text-primary">{member.role}</p>
+                      <div className="flex gap-4 mt-4 text-muted-foreground">
+                        <Link href={member.instagram} target="_blank" className="hover:text-primary transition-colors">
+                           <Instagram className="h-5 w-5" />
+                        </Link>
+                        <Link href={member.whatsapp} target="_blank" className="hover:text-primary transition-colors">
+                           <WhatsAppIcon className="h-5 w-5" />
+                        </Link>
+                        <Link href={member.linkedin} target="_blank" className="hover:text-primary transition-colors">
+                           <Linkedin className="h-5 w-5" />
+                        </Link>
+                      </div>
                     </CardContent>
                   </Card>
                 );
@@ -74,21 +95,28 @@ export default function OrganizationPage() {
               {pastDirectors.map((director) => {
                   const directorImage = PlaceHolderImages.find(p => p.id === director.imageUrlId);
                   return (
-                    <Card key={director.name} className="overflow-hidden text-center">
+                    <Card key={director.name} className="overflow-hidden group">
                       <div className="relative h-56 w-full">
                         {directorImage && (
                           <Image
                             src={directorImage.imageUrl}
                             alt={director.name}
                             fill
-                            className="object-cover"
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
                             data-ai-hint={directorImage.imageHint}
                           />
                         )}
                       </div>
-                      <CardContent className="p-4">
+                      <CardContent className="p-4 text-center">
                         <h3 className="text-lg font-semibold">{director.name}</h3>
                         <p className="text-sm text-muted-foreground">{director.term}</p>
+                        <div className="mt-3 flex justify-center">
+                            <Button asChild variant="outline" size="icon">
+                                <Link href={director.linkedin} target="_blank">
+                                    <Linkedin className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   );
