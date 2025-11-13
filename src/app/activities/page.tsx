@@ -1,14 +1,15 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Trophy, Zap } from "lucide-react";
+import { Calendar, Trophy, Zap, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 
 const upcomingActivities = [
-  { title: "Annual Robotics Expo", date: "Oct 25, 2024", description: "Showcasing our latest projects and innovations to the university community." },
-  { title: "Workshop: Intro to ROS", date: "Nov 10, 2024", description: "A beginner-friendly workshop on the Robot Operating System (ROS)." },
+  { title: "Annual Robotics Expo", date: "Oct 25, 2024", description: "Showcasing our latest projects and innovations to the university community.", imageUrlId: 'activity-2', link: '#' },
 ];
 
 const pastActivities = [
@@ -25,6 +26,8 @@ const achievements = [
 
 export default function ActivitiesPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-activities');
+  const upcomingActivityImage = PlaceHolderImages.find(p => p.id === upcomingActivities[0].imageUrlId);
+
 
   return (
     <div className="flex flex-col">
@@ -61,14 +64,36 @@ export default function ActivitiesPage() {
           <TabsContent value="upcoming" className="mt-6">
             <div className="grid gap-6">
               {upcomingActivities.map((activity, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <CardTitle>{activity.title}</CardTitle>
-                      <Badge variant="secondary">{activity.date}</Badge>
+                <Card key={index} className="overflow-hidden">
+                  <div className="grid md:grid-cols-2">
+                    {upcomingActivityImage && (
+                      <div className="relative h-60 md:h-full">
+                        <Image
+                          src={upcomingActivityImage.imageUrl}
+                          alt={activity.title}
+                          fill
+                          className="object-cover"
+                          data-ai-hint={upcomingActivityImage.imageHint}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <CardTitle>{activity.title}</CardTitle>
+                          <Badge variant="secondary">{activity.date}</Badge>
+                        </div>
+                        <CardDescription className="pt-2">{activity.description}</CardDescription>
+                      </CardHeader>
+                      <CardFooter>
+                         <Button asChild>
+                            <Link href={activity.link}>
+                                Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                        </Button>
+                      </CardFooter>
                     </div>
-                    <CardDescription className="pt-2">{activity.description}</CardDescription>
-                  </CardHeader>
+                  </div>
                 </Card>
               ))}
             </div>
