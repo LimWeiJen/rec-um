@@ -7,6 +7,30 @@
       "imageHint": "robotics workshop"
     },
     {
+      "id": "hero-about",
+      "description": "A group of engineers collaborating around a blueprint.",
+      "imageUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0ZWFtJTIwd29ya2luZ3xlbnwwfHx8fDE3NjMwNDgwMDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "engineers collaborating"
+    },
+    {
+      "id": "hero-organization",
+      "description": "A modern open-plan office space with people working.",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0ZWFtJTIwY29sbGFib3JhdGlvbnxlbnwwfHx8fDE3NjM0OTYxMDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "team collaboration"
+    },
+    {
+      "id": "hero-activities",
+      "description": "A dynamic shot of a robot in a competition setting.",
+      "imageUrl": "https://images.unsplash.com/photo-1691136942004-394a86036a13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb2JvdGljcyUyMGNvbXBldGl0aW9ufGVufDB8fHx8MTc2MzQ5NjEwOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "robotics competition"
+    },
+    {
+      "id": "hero-robocon",
+      "description": "A team celebrating a victory at a robotics competition.",
+      "imageUrl": "https://images.unsplash.com/photo-1622260872090-5c558010a67e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5uaW5nJTIwdGVhbXxlbnwwfHx8fDE3NjMwNDgwMDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "winning team"
+    },
+    {
       "id": "founder",
       "description": "Portrait of the club founder.",
       "imageUrl": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjI5NzQwMjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
