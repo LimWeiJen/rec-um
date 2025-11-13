@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'REC Robotics Hub',
+  title: 'REC',
   description: 'The official hub for REC Robotics Club activities, projects, and members.',
 };
 

@@ -76,7 +76,7 @@ export function Header() {
   };
 
   const isHomePage = pathname === "/";
-  const showNav = !isHomePage || scrolled || mouseAtTop;
+  const showNav = scrolled || mouseAtTop;
 
   return (
     <header className={cn(
@@ -90,7 +90,7 @@ export function Header() {
           <div className="mr-4 flex items-center">
             <Link href="/" className="mr-6 flex items-center space-x-2">
               <Bot className="h-6 w-6 text-primary" />
-              <span className="font-bold sm:inline-block">REC Robotics Hub</span>
+              <span className="font-bold sm:inline-block">REC</span>
             </Link>
             <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
               {navLinks.map((link) => (
@@ -110,7 +110,7 @@ export function Header() {
                 <div className="flex flex-col space-y-4 pt-6">
                   <Link href="/" className="mb-4 flex items-center space-x-2">
                     <Bot className="h-8 w-8 text-primary" />
-                    <span className="font-bold text-xl">REC Robotics Hub</span>
+                    <span className="font-bold text-xl">REC</span>
                   </Link>
                   {navLinks.map((link) => (
                     <MobileNavLink key={link.href} {...link} />

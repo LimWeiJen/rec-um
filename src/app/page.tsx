@@ -29,7 +29,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white px-4">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline">
-            Welcome to REC Robotics Hub
+            Welcome to REC
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-neutral-200 md:text-xl">
             At the forefront of innovation, our club is dedicated to exploring the fascinating world of robotics, fostering teamwork, and pushing the boundaries of technology.
