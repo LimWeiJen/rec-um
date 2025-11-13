@@ -1,0 +1,79 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+
+const teamMembers = [
+  { name: "Alex Dynamo", role: "Club Director", imageUrlId: "team-member-1" },
+  { name: "Brenda Circuit", role: "Head of Mechanical", imageUrlId: "team-member-2" },
+  { name: "Charlie Gear", role: "Head of Electrical", imageUrlId: "team-member-3" },
+  { name: "Dana Logic", role: "Head of Programming", imageUrlId: "team-member-4" },
+];
+
+const pastDirectors = [
+  { name: "Edward Volt", term: "2022-2023" },
+  { name: "Fiona Servo", term: "2021-2022" },
+  { name: "George Piston", term: "2020-2021" },
+];
+
+export default function OrganizationPage() {
+  return (
+    <div className="container mx-auto max-w-screen-lg py-12 px-4 md:py-20 md:px-6">
+      <div className="space-y-16">
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-headline">
+            Our Organization
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground">
+            The talented individuals driving our club forward.
+          </p>
+        </div>
+
+        <div className="space-y-8">
+          <h2 className="text-3xl font-bold text-center">Current Team Hierarchy</h2>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {teamMembers.map((member) => {
+              const memberImage = PlaceHolderImages.find(p => p.id === member.imageUrlId);
+              return (
+                <Card key={member.name} className="text-center border-2 border-transparent hover:border-primary/80 hover:shadow-lg transition-all transform hover:-translate-y-1">
+                  <CardContent className="flex flex-col items-center pt-6">
+                    <Avatar className="h-24 w-24 mb-4 ring-2 ring-primary/50">
+                      {memberImage && (
+                        <AvatarImage src={memberImage.imageUrl} alt={member.name} data-ai-hint={memberImage.imageHint} />
+                      )}
+                      <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="text-xl font-semibold">{member.name}</h3>
+                    <p className="text-primary">{member.role}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="space-y-8">
+          <h2 className="text-3xl font-bold text-center">Past Directors</h2>
+          <Card>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[60%]">Name</TableHead>
+                  <TableHead className="text-right">Term of Service</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pastDirectors.map((director) => (
+                  <TableRow key={director.name}>
+                    <TableCell className="font-medium">{director.name}</TableCell>
+                    <TableCell className="text-right text-muted-foreground">{director.term}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
