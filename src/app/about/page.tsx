@@ -107,6 +107,8 @@ export default function AboutPage() {
             </p>
           </div>
 
+          <Separator className="my-8" />
+
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-center">Why Join Us?</h2>
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
