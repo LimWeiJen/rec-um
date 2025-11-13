@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from "next/image";
 
@@ -12,9 +11,9 @@ const teamMembers = [
 ];
 
 const pastDirectors = [
-  { name: "Edward Volt", term: "2022-2023" },
-  { name: "Fiona Servo", term: "2021-2022" },
-  { name: "George Piston", term: "2020-2021" },
+    { name: "Edward Volt", term: "2022-2023", imageUrlId: "past-director-1" },
+    { name: "Fiona Servo", term: "2021-2022", imageUrlId: "past-director-2" },
+    { name: "George Piston", term: "2020-2021", imageUrlId: "past-director-3" },
 ];
 
 export default function OrganizationPage() {
@@ -71,24 +70,30 @@ export default function OrganizationPage() {
 
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-center">Past Directors</h2>
-            <Card>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[60%]">Name</TableHead>
-                    <TableHead className="text-right">Term of Service</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pastDirectors.map((director) => (
-                    <TableRow key={director.name}>
-                      <TableCell className="font-medium">{director.name}</TableCell>
-                      <TableCell className="text-right text-muted-foreground">{director.term}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
+            <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+              {pastDirectors.map((director) => {
+                  const directorImage = PlaceHolderImages.find(p => p.id === director.imageUrlId);
+                  return (
+                    <Card key={director.name} className="overflow-hidden text-center">
+                      <div className="relative h-56 w-full">
+                        {directorImage && (
+                          <Image
+                            src={directorImage.imageUrl}
+                            alt={director.name}
+                            fill
+                            className="object-cover"
+                            data-ai-hint={directorImage.imageHint}
+                          />
+                        )}
+                      </div>
+                      <CardContent className="p-4">
+                        <h3 className="text-lg font-semibold">{director.name}</h3>
+                        <p className="text-sm text-muted-foreground">{director.term}</p>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+            </div>
           </div>
         </div>
       </div>
