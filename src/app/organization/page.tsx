@@ -111,7 +111,7 @@ export default function OrganizationPage() {
                         <h3 className="text-lg font-semibold">{director.name}</h3>
                         <p className="text-sm text-muted-foreground">{director.term}</p>
                         <div className="mt-3 flex justify-center">
-                            <Button asChild variant="outline" size="icon">
+                            <Button asChild size="icon">
                                 <Link href={director.linkedin} target="_blank">
                                     <Linkedin className="h-4 w-4" />
                                 </Link>
