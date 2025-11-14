@@ -9,35 +9,25 @@ import { Check, Cpu, Wrench, Code, Trophy } from "lucide-react";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { fetchRoboconContent, fetchRoboconAchievements } from "@/lib/content-fetcher";
 
+export default async function RoboconPage() {
+  const content = await fetchRoboconContent();
+  const roboconAchievements = await fetchRoboconAchievements();
 
-const departments = [
-  { name: "Mechanical Team", icon: <Wrench className="h-5 w-5 text-primary" />, description: "Designs and fabricates the robot's structure, ensuring durability and agility.", imageUrlId: "mechanical-team" },
-  { name: "Electrical Team", icon: <Cpu className="h-5 w-5 text-primary" />, description: "Manages all wiring, power distribution, and sensor integration.", imageUrlId: "electrical-team" },
-  { name: "Programming Team", icon: <Code className="h-5 w-5 text-primary" />, description: "Develops the robot's control software, from autonomous logic to manual controls.", imageUrlId: "programming-team" },
-];
-
-const roboconAchievements = [
-  { title: "National Champions", year: "2022", imageUrlId: "achievement-1" },
-  { title: "Best Innovative Design", year: "2021", imageUrlId: "achievement-2" },
-  { title: "Quarter-finalists", year: "2023", imageUrlId: "achievement-3" },
-];
-
-export default function RoboconPage() {
-  const prepImage = PlaceHolderImages.find(p => p.id === 'robocon-prep');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-robocon');
 
   return (
     <div className="flex flex-col">
       <section className="relative w-full h-screen">
-        {heroImage && (
+        {(content.heroImageUrl || heroImage) && (
           <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
+            src={content.heroImageUrl || heroImage?.imageUrl || ''}
+            alt={heroImage?.description || "Robocon"}
             fill
             className="object-cover"
             priority
-            data-ai-hint={heroImage.imageHint}
+            data-ai-hint={heroImage?.imageHint}
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
@@ -56,12 +46,7 @@ export default function RoboconPage() {
           <AccordionItem value="item-1">
             <AccordionTrigger className="text-xl font-semibold hover:no-underline">What is Robocon?</AccordionTrigger>
             <AccordionContent className="text-muted-foreground space-y-4 pt-2">
-              <p>
-                ABU Robocon is an annual international robotics competition for undergraduate students in the Asia-Pacific region. Each year, a new theme and set of challenges are released, requiring teams to design and build multiple robots to complete complex tasks autonomously and manually within a time limit.
-              </p>
-              <p>
-                It's a test of engineering skill, teamwork, and strategy, pushing teams to innovate and perform under pressure.
-              </p>
+              <p>{content.whatIsRoboconText}</p>
             </AccordionContent>
           </AccordionItem>
           
@@ -70,17 +55,11 @@ export default function RoboconPage() {
             <AccordionContent className="pt-2">
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="text-muted-foreground space-y-4">
-                  <p>Our preparation is a year-long cycle of dedication and hard work. It involves:</p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start"><Check className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" /><span><strong>Brainstorming & Strategy:</strong> Analyzing the year's theme and devising a winning strategy.</span></li>
-                    <li className="flex items-start"><Check className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" /><span><strong>Prototyping:</strong> Rapidly testing different mechanisms and designs.</span></li>
-                    <li className="flex items-start"><Check className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" /><span><strong>Manufacturing & Assembly:</strong> Precisely building the final robots.</span></li>
-                    <li className="flex items-start"><Check className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" /><span><strong>Testing & Refinement:</strong> Rigorous testing and code optimization to ensure peak performance.</span></li>
-                  </ul>
+                  <p>{content.howWePrepareText}</p>
                 </div>
-                {prepImage && (
+                {content.howWePrepareImageUrl && (
                   <div className="relative h-64 rounded-lg overflow-hidden">
-                    <Image src={prepImage.imageUrl} alt={prepImage.description} fill className="object-cover" data-ai-hint={prepImage.imageHint} />
+                    <Image src={content.howWePrepareImageUrl} alt="How We Prepare" fill className="object-cover" />
                   </div>
                 )}
               </div>
@@ -91,31 +70,65 @@ export default function RoboconPage() {
             <AccordionTrigger className="text-xl font-semibold hover:no-underline">Team Departments</AccordionTrigger>
             <AccordionContent className="pt-2">
               <div className="grid md:grid-cols-3 gap-6">
-                {departments.map(dept => {
-                  const deptImage = PlaceHolderImages.find(p => p.id === dept.imageUrlId);
-                  return (
-                    <Card key={dept.name} className="overflow-hidden group">
-                       {deptImage && (
-                        <div className="relative h-48 w-full">
-                          <Image
-                            src={deptImage.imageUrl}
-                            alt={dept.name}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={deptImage.imageHint}
-                          />
-                        </div>
-                      )}
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-3 mb-2">
-                          {dept.icon}
-                          <h4 className="font-semibold text-lg">{dept.name}</h4>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{dept.description}</p>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
+                <Card className="overflow-hidden group">
+                  {content.mechanicalTeamImageUrl && (
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={content.mechanicalTeamImageUrl}
+                        alt="Mechanical Team"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Wrench className="h-5 w-5 text-primary" />
+                      <h4 className="font-semibold text-lg">Mechanical Team</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{content.mechanicalTeamText}</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="overflow-hidden group">
+                  {content.electricalTeamImageUrl && (
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={content.electricalTeamImageUrl}
+                        alt="Electrical Team"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Cpu className="h-5 w-5 text-primary" />
+                      <h4 className="font-semibold text-lg">Electrical Team</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{content.electricalTeamText}</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="overflow-hidden group">
+                  {content.programmingTeamImageUrl && (
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={content.programmingTeamImageUrl}
+                        alt="Programming Team"
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Code className="h-5 w-5 text-primary" />
+                      <h4 className="font-semibold text-lg">Programming Team</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{content.programmingTeamText}</p>
+                  </CardContent>
+                </Card>
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -123,31 +136,31 @@ export default function RoboconPage() {
           <AccordionItem value="item-4">
             <AccordionTrigger className="text-xl font-semibold hover:no-underline">Our Robocon Achievements</AccordionTrigger>
             <AccordionContent className="pt-2">
-               <div className="grid md:grid-cols-3 gap-6">
-                {roboconAchievements.map(ach => {
-                  const achImage = PlaceHolderImages.find(p => p.id === ach.imageUrlId);
-                  return (
-                    <Card key={ach.title} className="overflow-hidden group text-center">
-                       {achImage && (
+              {roboconAchievements.length > 0 ? (
+                <div className="grid md:grid-cols-3 gap-6">
+                  {roboconAchievements.map((ach, index) => (
+                    <Card key={index} className="overflow-hidden group text-center">
+                      {ach["image-url"] && (
                         <div className="relative h-56 w-full">
                           <Image
-                            src={achImage.imageUrl}
-                            alt={ach.title}
+                            src={ach["image-url"]}
+                            alt={ach.name}
                             fill
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={achImage.imageHint}
                           />
                         </div>
                       )}
                       <CardContent className="p-4">
                         <Trophy className="h-6 w-6 text-primary mx-auto mb-2" />
-                        <h4 className="font-semibold text-lg">{ach.title}</h4>
-                        <Badge variant="secondary" className="mt-1">{ach.year}</Badge>
+                        <h4 className="font-semibold text-lg">{ach.name}</h4>
+                        <Badge variant="secondary" className="mt-1">{ach.date}</Badge>
                       </CardContent>
                     </Card>
-                  )
-                })}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-muted-foreground py-8">No achievements recorded yet.</p>
+              )}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

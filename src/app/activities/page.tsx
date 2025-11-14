@@ -6,40 +6,28 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { fetchActivitiesContent, fetchActivitiesUpcoming, fetchActivitiesPast, fetchActivitiesAchievements } from "@/lib/content-fetcher";
 
+export default async function ActivitiesPage() {
+  const content = await fetchActivitiesContent();
+  const upcomingActivities = await fetchActivitiesUpcoming();
+  const pastActivities = await fetchActivitiesPast();
+  const achievements = await fetchActivitiesAchievements();
 
-const upcomingActivities = [
-  { title: "Annual Robotics Expo", date: "Oct 25, 2024", description: "Showcasing our latest projects and innovations to the university community.", imageUrlId: 'activity-2', link: '#' },
-];
-
-const pastActivities = [
-  { title: "National Robocon 2023", date: "Aug 15, 2023", description: "Competed against top universities, showcasing our autonomous robot 'Phoenix'." },
-  { title: "TechKriti Festival", date: "Mar 20, 2023", description: "Participated in various robotics challenges and won 'Best Design'." },
-  { title: "Guest Lecture: AI in Robotics", date: "Feb 05, 2023", description: "Hosted an insightful session with a leading AI researcher." },
-];
-
-const achievements = [
-  { title: "Winner, National Robocon 2022", year: "2022", description: "Secured the first position with our robot 'Atlas'." },
-  { title: "Best Design Award, TechFest 2023", year: "2023", description: "Recognized for innovative mechanical design." },
-  { title: "Runners Up, Inter-University Robotics Challenge", year: "2021", description: "Achieved second place in a tough competition." },
-];
-
-export default function ActivitiesPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-activities');
-  const upcomingActivityImage = PlaceHolderImages.find(p => p.id === upcomingActivities[0].imageUrlId);
 
 
   return (
     <div className="flex flex-col">
        <section className="relative w-full h-screen">
-        {heroImage && (
+        {(content.heroImageUrl || heroImage) && (
           <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
+            src={content.heroImageUrl || heroImage?.imageUrl || ''}
+            alt={heroImage?.description || "Club Activities"}
             fill
             className="object-cover"
             priority
-            data-ai-hint={heroImage.imageHint}
+            data-ai-hint={heroImage?.imageHint}
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
@@ -63,70 +51,83 @@ export default function ActivitiesPage() {
 
           <TabsContent value="upcoming" className="mt-6">
             <div className="grid gap-6">
-              {upcomingActivities.map((activity, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <div>
-                    {upcomingActivityImage && (
-                      <div className="relative h-80 w-full">
-                        <Image
-                          src={upcomingActivityImage.imageUrl}
-                          alt={activity.title}
-                          fill
-                          className="object-cover"
-                          data-ai-hint={upcomingActivityImage.imageHint}
-                        />
-                      </div>
-                    )}
+              {upcomingActivities.length > 0 ? (
+                upcomingActivities.map((activity, index) => (
+                  <Card key={index} className="overflow-hidden">
                     <div>
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <CardTitle>{activity.title}</CardTitle>
-                          <Badge variant="secondary">{activity.date}</Badge>
+                      {activity["Image Url"] && (
+                        <div className="relative h-80 w-full">
+                          <Image
+                            src={activity["Image Url"]}
+                            alt="Upcoming Activity"
+                            fill
+                            className="object-cover"
+                          />
                         </div>
-                        <CardDescription className="pt-2">{activity.description}</CardDescription>
-                      </CardHeader>
-                      <CardFooter>
-                         <Button asChild>
-                            <Link href={activity.link}>
+                      )}
+                      <div>
+                        <CardHeader>
+                          <div className="flex justify-between items-start">
+                            <CardTitle>Upcoming Event</CardTitle>
+                            <Badge variant="secondary">{activity["Activity Date"]}</Badge>
+                          </div>
+                          <CardDescription className="pt-2">{activity["Activity Description"]}</CardDescription>
+                        </CardHeader>
+                        {activity["Activity Link"] && activity["Activity Link"] !== "#" && (
+                          <CardFooter>
+                            <Button asChild>
+                              <Link href={activity["Activity Link"]}>
                                 Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                            </Link>
-                        </Button>
-                      </CardFooter>
+                              </Link>
+                            </Button>
+                          </CardFooter>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">No upcoming activities at the moment.</p>
+              )}
             </div>
           </TabsContent>
 
           <TabsContent value="past" className="mt-6">
             <div className="grid gap-6">
-              {pastActivities.map((activity, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <CardTitle>{activity.title}</CardTitle>
-                      <Badge variant="outline">{activity.date}</Badge>
-                    </div>
-                    <CardDescription className="pt-2">{activity.description}</CardDescription>
-                  </CardHeader>
-                </Card>
-              ))}
+              {pastActivities.length > 0 ? (
+                pastActivities.map((activity, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle>{activity.name}</CardTitle>
+                        <Badge variant="outline">{activity.date}</Badge>
+                      </div>
+                      <CardDescription className="pt-2">{activity.description}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">No past activities recorded.</p>
+              )}
             </div>
           </TabsContent>
 
           <TabsContent value="achievements" className="mt-6">
             <div className="grid gap-6">
-              {achievements.map((achievement, index) => (
-                <Card key={index} className="flex items-center p-4">
-                  <Trophy className="h-8 w-8 text-primary mr-4 flex-shrink-0" />
-                  <div className="flex-grow">
-                    <h3 className="font-semibold">{achievement.title}</h3>
-                    <p className="text-sm text-muted-foreground">{achievement.description}</p>
-                  </div>
-                  <Badge>{achievement.year}</Badge>
-                </Card>
-              ))}
+              {achievements.length > 0 ? (
+                achievements.map((achievement, index) => (
+                  <Card key={index} className="flex items-center p-4">
+                    <Trophy className="h-8 w-8 text-primary mr-4 flex-shrink-0" />
+                    <div className="flex-grow">
+                      <h3 className="font-semibold">{achievement.name}</h3>
+                      <p className="text-sm text-muted-foreground">{achievement.description}</p>
+                    </div>
+                    <Badge>{achievement.date}</Badge>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">No achievements recorded yet.</p>
+              )}
             </div>
           </TabsContent>
         </Tabs>

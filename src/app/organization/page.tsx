@@ -5,19 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const teamMembers = [
-  { name: "Alex Dynamo", role: "Club Director", imageUrlId: "team-member-1", instagram: "#", whatsapp: "#", linkedin: "#" },
-  { name: "Brenda Circuit", role: "Head of Mechanical", imageUrlId: "team-member-2", instagram: "#", whatsapp: "#", linkedin: "#" },
-  { name: "Charlie Gear", role: "Head of Electrical", imageUrlId: "team-member-3", instagram: "#", whatsapp: "#", linkedin: "#" },
-  { name: "Dana Logic", role: "Head of Programming", imageUrlId: "team-member-4", instagram: "#", whatsapp: "#", linkedin: "#" },
-];
-
-const pastDirectors = [
-    { name: "Edward Volt", term: "2022-2023", imageUrlId: "past-director-1", linkedin: "#" },
-    { name: "Fiona Servo", term: "2021-2022", imageUrlId: "past-director-2", linkedin: "#" },
-    { name: "George Piston", term: "2020-2021", imageUrlId: "past-director-3", linkedin: "#" },
-];
+import { fetchOrganizationContent, fetchOrganizationHierarchy, fetchOrganizationPastDirectors } from "@/lib/content-fetcher";
 
 const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -25,21 +13,24 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 )
 
+export default async function OrganizationPage() {
+  const content = await fetchOrganizationContent();
+  const hierarchyMembers = await fetchOrganizationHierarchy();
+  const pastDirectors = await fetchOrganizationPastDirectors();
 
-export default function OrganizationPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-organization');
 
   return (
     <div className="flex flex-col">
       <section className="relative w-full h-screen">
-        {heroImage && (
+        {(content.heroImageUrl || heroImage) && (
           <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
+            src={content.heroImageUrl || heroImage?.imageUrl || ''}
+            alt={heroImage?.description || "Our Organization"}
             fill
             className="object-cover"
             priority
-            data-ai-hint={heroImage.imageHint}
+            data-ai-hint={heroImage?.imageHint}
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
@@ -57,72 +48,94 @@ export default function OrganizationPage() {
         <div className="space-y-16">
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-center">Current Team Hierarchy</h2>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {teamMembers.map((member) => {
-                const memberImage = PlaceHolderImages.find(p => p.id === member.imageUrlId);
-                return (
-                  <Card key={member.name} className="text-center border-2 border-transparent hover:border-primary/80 hover:shadow-lg transition-all transform hover:-translate-y-1">
-                    <CardContent className="flex flex-col items-center pt-6">
-                      <Avatar className="h-24 w-24 mb-4 ring-2 ring-primary/50">
-                        {memberImage && (
-                          <AvatarImage src={memberImage.imageUrl} alt={member.name} data-ai-hint={memberImage.imageHint} />
-                        )}
-                        <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <h3 className="text-xl font-semibold">{member.name}</h3>
-                      <p className="text-muted-foreground">{member.role}</p>
-                      <div className="flex gap-4 mt-4 text-muted-foreground">
-                        <Link href={member.instagram} target="_blank" className="hover:text-primary transition-colors">
-                           <Instagram className="h-5 w-5" />
-                        </Link>
-                        <Link href={member.whatsapp} target="_blank" className="hover:text-primary transition-colors">
-                           <WhatsAppIcon className="h-5 w-5" />
-                        </Link>
-                        <Link href={member.linkedin} target="_blank" className="hover:text-primary transition-colors">
-                           <Linkedin className="h-5 w-5" />
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
+            {hierarchyMembers.length > 0 ? (
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {hierarchyMembers.map((member) => {
+                  const hasValidLinks = (member["ig-link"] && member["ig-link"] !== "#") ||
+                                       (member["ws-link"] && member["ws-link"] !== "#") ||
+                                       (member["linkedin-link"] && member["linkedin-link"] !== "#");
 
-          <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-center">Past Directors</h2>
-            <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-              {pastDirectors.map((director) => {
-                  const directorImage = PlaceHolderImages.find(p => p.id === director.imageUrlId);
                   return (
-                    <Card key={director.name} className="overflow-hidden group">
-                      <div className="relative h-56 w-full">
-                        {directorImage && (
-                          <Image
-                            src={directorImage.imageUrl}
-                            alt={director.name}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={directorImage.imageHint}
-                          />
+                    <Card key={member.name} className="text-center border-2 border-transparent hover:border-primary/80 hover:shadow-lg transition-all transform hover:-translate-y-1">
+                      <CardContent className="flex flex-col items-center pt-6">
+                        <Avatar className="h-24 w-24 mb-4 ring-2 ring-primary/50">
+                          {member["img-url"] && (
+                            <AvatarImage className="object-cover" src={member["img-url"]} alt={member.name} />
+                          )}
+                          <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <h3 className="text-xl font-semibold">{member.name}</h3>
+                        <p className="text-muted-foreground">{member.position}</p>
+                        {member.description && (
+                          <p className="text-sm text-muted-foreground mt-2">{member.description}</p>
                         )}
-                      </div>
-                      <CardContent className="p-4 text-center">
-                        <h3 className="text-lg font-semibold">{director.name}</h3>
-                        <p className="text-sm text-muted-foreground">{director.term}</p>
-                        <div className="mt-3 flex justify-center">
-                            <Button asChild size="icon" variant="outline">
-                                <Link href={director.linkedin} target="_blank">
-                                    <Linkedin className="h-4 w-4" />
-                                </Link>
-                            </Button>
-                        </div>
+                        {hasValidLinks && (
+                          <div className="flex gap-4 mt-4 text-muted-foreground">
+                            {member["ig-link"] && member["ig-link"] !== "#" && (
+                              <Link href={member["ig-link"]} target="_blank" className="hover:text-primary transition-colors">
+                                <Instagram className="h-5 w-5" />
+                              </Link>
+                            )}
+                            {member["ws-link"] && member["ws-link"] !== "#" && (
+                              <Link href={member["ws-link"]} target="_blank" className="hover:text-primary transition-colors">
+                                <WhatsAppIcon className="h-5 w-5" />
+                              </Link>
+                            )}
+                            {member["linkedin-link"] && member["linkedin-link"] !== "#" && (
+                              <Link href={member["linkedin-link"]} target="_blank" className="hover:text-primary transition-colors">
+                                <Linkedin className="h-5 w-5" />
+                              </Link>
+                            )}
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   );
                 })}
-            </div>
+              </div>
+            ) : (
+              <p className="text-center text-muted-foreground">No team members available at the moment.</p>
+            )}
           </div>
+
+          {pastDirectors.length > 0 && (
+            <div className="space-y-8">
+              <h2 className="text-3xl font-bold text-center">Past Directors</h2>
+              <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+                {pastDirectors.map((director) => (
+                  <Card key={director.name} className="overflow-hidden group">
+                    <div className="relative h-56 w-full">
+                      {director["img-url"] && (
+                        <Image
+                          src={director["img-url"]}
+                          alt={director.name}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      )}
+                    </div>
+                    <CardContent className="p-4 text-center">
+                      <h3 className="text-lg font-semibold">{director.name}</h3>
+                      <p className="text-sm text-muted-foreground">{director.year}</p>
+                      {director.description && (
+                        <p className="text-sm text-muted-foreground mt-2">{director.description}</p>
+                      )}
+                      {director["linkedin-link"] && director["linkedin-link"] !== "#" && (
+                        <div className="mt-3 flex justify-center">
+                          <Button asChild size="icon" variant="outline">
+                            <Link href={director["linkedin-link"]} target="_blank">
+                              <Linkedin className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
