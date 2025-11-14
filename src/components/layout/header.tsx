@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -84,11 +85,10 @@ export function Header() {
     )}>
       <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-center px-4 md:px-6">
         <div className={cn(
-          "flex h-14 w-full max-w-5xl items-center justify-between rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          "flex h-14 w-full max-w-5xl items-center justify-between rounded-full border bg-background/95 p-2 px-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
         )}>
-          <Link href="/" className="flex items-center space-x-2">
-            <Bot className="h-6 w-6 text-primary" />
-            <span className="font-bold sm:inline-block">REC</span>
+          <Link href="/" className="flex items-center">
+            <Image src="https://rec-um.github.io/images/LOGOPNG.png" alt="REC Logo" width={80} height={40} className="object-contain" />
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
@@ -106,8 +106,7 @@ export function Header() {
               <SheetContent side="left">
                 <div className="flex flex-col space-y-4 pt-6">
                   <Link href="/" className="mb-4 flex items-center space-x-2">
-                    <Bot className="h-8 w-8 text-primary" />
-                    <span className="font-bold text-xl">REC</span>
+                     <Image src="https://rec-um.github.io/images/LOGOPNG.png" alt="REC Logo" width={100} height={50} className="object-contain" />
                   </Link>
                   {navLinks.map((link) => (
                     <MobileNavLink key={link.href} {...link} />
