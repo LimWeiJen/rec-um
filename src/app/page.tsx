@@ -71,15 +71,50 @@ export default function Home() {
     // Create multiple cube placeholders floating around
     const cubes: any = [];
     const cubePositions = [
-      { x: -3, y: 2, z: -2 },
-      { x: 3, y: -1, z: -1 },
-      { x: -2, y: -2, z: 1 },
-      { x: 2.5, y: 1.5, z: -3 },
-      { x: -3.5, y: -1.5, z: 0 },
-      { x: 1, y: 2.5, z: 2 }
+      // Randomized positions across the screen
+      { x: -4.2, y: 2.8, z: 0.3 },
+      { x: -1.7, y: 3.2, z: 1.4 },
+      { x: 2.3, y: 2.6, z: 1.7 },
+
+      { x: -4.8, y: 1.2, z: 0.7 },
+      { x: -0.3, y: 1.8, z: 0.4 },
+      { x: 3.2, y: 1.3, z: 1.2 },
+
+      { x: -4.1, y: -1.8, z: 0.9 },
+      { x: -0.7, y: -1.2, z: 0.3 },
+      { x: 3.8, y: -1.6, z: 1.1 },
+
+      { x: -3.7, y: -2.8, z: 1.3 },
+      { x: -1.9, y: -3.1, z: 0.6 },
+      { x: 2.1, y: -2.7, z: 0.9 },
+      { x: 4.3, y: -3.3, z: 1.5 },
+
+      // Middle layer - scattered
+      { x: -3.2, y: 2.7, z: -1.2 },
+      { x: 2.8, y: 2.3, z: -1.6 },
+
+      { x: -4.3, y: -1.9, z: -1.7 },
+      { x: 1.8, y: -2.2, z: -0.8 },
+
+      // Back layer - more depth variation
+      { x: -2.8, y: 1.7, z: -3.2 },
+      { x: -0.9, y: 2.3, z: -3.7 },
+
+      { x: 1.3, y: -0.8, z: -2.9 },
+      { x: 3.2, y: -1.3, z: -3.6 },
+
     ];
 
-    const cubeColors = [0xff6b6b, 0x4ecdc4, 0xffe66d, 0xa8e6cf, 0xff8b94, 0xc7ceea];
+    const cubeColors = [
+      0xff6b6b, 0x4ecdc4, 0xffe66d, 0xa8e6cf, 0xff8b94, 0xc7ceea,
+      0xffa07a, 0x98d8c8, 0xf7dc6f, 0xbb8fce, 0xf8b4d9, 0x85c1e2,
+      0xff9ff3, 0x54a0ff, 0xfeca57, 0x48dbfb, 0xff6348, 0x1dd1a1,
+      0xee5a6f, 0xc44569, 0xf8a5c2, 0x63cdda, 0xea8685, 0x596275,
+      0xff6b6b, 0x4ecdc4, 0xffe66d, 0xa8e6cf, 0xff8b94, 0xc7ceea,
+      0xffa07a, 0x98d8c8, 0xf7dc6f, 0xbb8fce, 0xf8b4d9, 0x85c1e2,
+      0xff9ff3, 0x54a0ff, 0xfeca57, 0x48dbfb, 0xff6348, 0x1dd1a1,
+      0xee5a6f, 0xc44569, 0xf8a5c2, 0x63cdda, 0xea8685, 0x596275
+    ];
 
     cubePositions.forEach((pos, idx) => {
       const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
@@ -88,15 +123,27 @@ export default function Home() {
         shininess: 100
       });
       const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.position.set(pos.x, pos.y, pos.z);
-      
-      // Store rotation multipliers for varied movement
+
+      // Start all cubes at the center with zero scale
+      cube.position.set(0, 0, 0);
+      cube.scale.set(0, 0, 0);
+
+      // Store final position and rotation multipliers
+      cube.userData.finalPosition = { x: pos.x, y: pos.y, z: pos.z };
       cube.userData.rotMultiplier = {
         x: 0.5 + Math.random() * 1.5,
         y: 0.5 + Math.random() * 1.5,
         z: 0.002 + Math.random() * 0.005
       };
-      
+      // Randomize initial rotation for each cube
+      cube.userData.initialRotation = {
+        x: Math.random() * Math.PI * 2,
+        y: Math.random() * Math.PI * 2,
+        z: Math.random() * Math.PI * 2
+      };
+      cube.userData.animationProgress = 0;
+      cube.userData.animationDelay = idx * 0.02; // Stagger the animation
+
       cubes.push(cube);
       scene.add(cube);
     });
@@ -123,15 +170,53 @@ export default function Home() {
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
-    
+
+    // Track animation time
+    let animationTime = 0;
+    const explosionDuration = 1.5; // Duration in seconds
+
+    // Easing function for smooth animation
+    const easeOutCubic = (t: number) => {
+      return 1 - Math.pow(1 - t, 3);
+    };
+
     // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
-      // Rotate cubes with different multipliers for varied movement
+
+      animationTime += 0.016; // Approximately 60fps
+
+      // Animate cubes explosion and rotation
       cubes.forEach((cube: any) => {
-        cube.rotation.y = mouseRef.current.x * Math.PI * cube.userData.rotMultiplier.y;
-        cube.rotation.x = mouseRef.current.y * Math.PI * cube.userData.rotMultiplier.x;
-        cube.rotation.z += cube.userData.rotMultiplier.z;
+        // Handle explosion animation
+        if (cube.userData.animationProgress < 1) {
+          const startTime = cube.userData.animationDelay;
+          const elapsed = Math.max(0, animationTime - startTime);
+          const progress = Math.min(1, elapsed / explosionDuration);
+
+          cube.userData.animationProgress = progress;
+
+          // Apply easing to the progress
+          const easedProgress = easeOutCubic(progress);
+
+          // Interpolate position from center to final position
+          cube.position.x = cube.userData.finalPosition.x * easedProgress;
+          cube.position.y = cube.userData.finalPosition.y * easedProgress;
+          cube.position.z = cube.userData.finalPosition.z * easedProgress;
+
+          // Scale from 0 to 1
+          cube.scale.set(easedProgress, easedProgress, easedProgress);
+
+          // Add rotation during explosion with randomized initial rotation
+          cube.rotation.x = cube.userData.initialRotation.x + (1 - easedProgress) * Math.PI * 4;
+          cube.rotation.y = cube.userData.initialRotation.y + (1 - easedProgress) * Math.PI * 4;
+          cube.rotation.z = cube.userData.initialRotation.z + (1 - easedProgress) * Math.PI * 2;
+        } else {
+          // After explosion, apply mouse-based rotation
+          cube.rotation.y = mouseRef.current.x * Math.PI * cube.userData.rotMultiplier.y;
+          cube.rotation.x = mouseRef.current.y * Math.PI * cube.userData.rotMultiplier.x;
+          cube.rotation.z += cube.userData.rotMultiplier.z;
+        }
       });
 
       renderer.render(scene, camera);
@@ -149,9 +234,6 @@ export default function Home() {
 
     // Start animation
     animate();
-
-    // Debug: Log that Three.js is initialized
-    console.log('Three.js scene initialized with', cubes.length, 'cubes and rocket');
 
     // Cleanup
     return () => {
@@ -180,12 +262,12 @@ export default function Home() {
 
         <div ref={containerRef} className="absolute inset-0 z-0" />
 
-        <div className="absolute inset-0 bg-black/10" />
+        <div className="absolute inset-0 bg-black/45" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white px-4">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline">
-            Welcome to REC
+            Welcome to <strong className="text-primary">REC</strong>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg text-neutral-200 md:text-xl">
+          <p className="mt-6 max-w-3xl text-lg text-neutral-200 md:text-xl shadow-2xl">
             {content.welcomeText}
           </p>
           <div className="mt-8">
@@ -312,7 +394,7 @@ export default function Home() {
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
                 Follow our journey, get the latest updates, and connect with us on social media.
             </p>
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-8 flex flex-wrap justify-center gap-3 md:gap-4">
                 {content.instagramLink && content.instagramLink !== "#" && (
                   <Button asChild size="lg" variant="outline">
                       <Link href={content.instagramLink} target="_blank">
