@@ -74,7 +74,18 @@ export default function Home() {
 
         {/* Our Team Section */}
         <section className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-4 md:order-2">
+           {teamImage && (
+            <div className="relative h-80 rounded-lg overflow-hidden order-1 md:order-2">
+              <Image
+                src={teamImage.imageUrl}
+                alt={teamImage.description}
+                fill
+                className="object-cover"
+                data-ai-hint={teamImage.imageHint}
+              />
+            </div>
+          )}
+          <div className="space-y-4 order-2 md:order-1">
             <h2 className="text-3xl font-bold font-headline">Our Team</h2>
             <p className="text-muted-foreground">
               Meet the talented and dedicated individuals who form the backbone of our club. Our team is a diverse group of students passionate about pushing the boundaries of robotics and innovation.
@@ -85,17 +96,6 @@ export default function Home() {
               </Link>
             </Button>
           </div>
-          {teamImage && (
-            <div className="relative h-80 rounded-lg overflow-hidden md:order-1">
-              <Image
-                src={teamImage.imageUrl}
-                alt={teamImage.description}
-                fill
-                className="object-cover"
-                data-ai-hint={teamImage.imageHint}
-              />
-            </div>
-          )}
         </section>
 
         {/* Activities Section */}
@@ -126,7 +126,18 @@ export default function Home() {
 
         {/* Robocon Section */}
         <section className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-4 md:order-2">
+          {roboconImage && (
+            <div className="relative h-80 rounded-lg overflow-hidden order-1 md:order-2">
+              <Image
+                src={roboconImage.imageUrl}
+                alt={roboconImage.description}
+                fill
+                className="object-cover"
+                data-ai-hint={roboconImage.imageHint}
+              />
+            </div>
+          )}
+          <div className="space-y-4 order-2 md:order-1">
             <h2 className="text-3xl font-bold font-headline">Robocon</h2>
             <p className="text-muted-foreground">
               We are passionate competitors in the annual ABU Robocon. Explore our journey, our strategies, and our achievements in this prestigious Asia-Pacific robotics competition.
@@ -137,17 +148,6 @@ export default function Home() {
               </Link>
             </Button>
           </div>
-          {roboconImage && (
-            <div className="relative h-80 rounded-lg overflow-hidden md:order-1">
-              <Image
-                src={roboconImage.imageUrl}
-                alt={roboconImage.description}
-                fill
-                className="object-cover"
-                data-ai-hint={roboconImage.imageHint}
-              />
-            </div>
-          )}
         </section>
 
       </div>
