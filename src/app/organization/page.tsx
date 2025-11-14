@@ -70,7 +70,7 @@ export default function OrganizationPage() {
                         <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                       </Avatar>
                       <h3 className="text-xl font-semibold">{member.name}</h3>
-                      <p className="text-primary-foreground">{member.role}</p>
+                      <p className="text-muted-foreground">{member.role}</p>
                       <div className="flex gap-4 mt-4 text-muted-foreground">
                         <Link href={member.instagram} target="_blank" className="hover:text-primary transition-colors">
                            <Instagram className="h-5 w-5" />
