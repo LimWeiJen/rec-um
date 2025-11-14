@@ -84,7 +84,7 @@ export function Header() {
     )}>
       <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-center px-4 md:px-6">
         <div className={cn(
-          "flex h-14 w-full max-w-7xl items-center justify-between rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          "flex h-14 w-full max-w-5xl items-center justify-between rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
         )}>
           <Link href="/" className="flex items-center space-x-2">
             <Bot className="h-6 w-6 text-primary" />
