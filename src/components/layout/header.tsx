@@ -82,11 +82,11 @@ export function Header() {
       "fixed top-0 z-50 w-full transition-transform duration-300",
       showNav ? "translate-y-0" : "-translate-y-full"
     )}>
-      <div className="container px-4 md:px-6 mt-2 flex justify-center">
+      <div className="container mx-auto px-4 md:px-6 mt-2 flex justify-center">
         <div className={cn(
-          "relative flex h-14 w-full max-w-screen-lg items-center rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          "flex h-14 w-full max-w-4xl items-center justify-between rounded-full border bg-background/95 p-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
         )}>
-          <div className="mr-4 flex items-center">
+          <div className="flex items-center">
             <Link href="/" className="mr-6 flex items-center space-x-2">
               <Bot className="h-6 w-6 text-primary" />
               <span className="font-bold sm:inline-block">REC</span>
@@ -97,10 +97,10 @@ export function Header() {
               ))}
             </nav>
           </div>
-          <div className="flex flex-1 items-center justify-end">
+          <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
