@@ -82,10 +82,15 @@ body {
   * {
     @apply border-border;
   }
+  html {
+    height: 100%;
+  }
   body {
     @apply bg-background text-foreground;
+    min-height: 100%;
   }
   .dark body {
     background: radial-gradient(circle at top, hsl(215, 100%, 10%), hsl(215, 100%, 5%));
+    background-attachment: fixed;
   }
 }
